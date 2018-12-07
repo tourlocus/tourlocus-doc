@@ -1,0 +1,277 @@
+#%RAML 1.0
+---
+title: TourLocus
+baseUri: http://localhost:3000/
+version: 1.0
+
+/articles:
+  displayName: Articles
+  description: "Article Resource Collection"
+  get:
+    description: "新着記事の一覧を取得する"
+    responses: 
+      200:
+        body:
+          application/json:
+            type: Object
+            example: |
+              [
+                {
+                  id: 1,
+                  user_id: 1,
+                  user_icon: 'sample.png',
+                  user_name: 'hoge',
+                  media: [],
+                  title: '大阪に行ってきた',
+                  content: '大阪に行ってきた'
+                  created_at: "2018-12-06-xxx-xxx",
+                  updated_at: "2018-12-06-xxx-xxx",
+                },
+                {
+                  id: 1,
+                  user_id: 1,
+                  user_icon: 'sample.png',
+                  user_name: 'hoge',
+                  media: [],
+                  title: '大阪に行ってきた',
+                  content: '大阪に行ってきた'
+                  created_at: "2018-12-06-xxx-xxx",
+                  updated_at: "2018-12-06-xxx-xxx",
+                },
+              ]
+  /popular:
+    get:
+      description: "人気記事の一覧を取得する"
+      responses: 
+        200:
+          body:
+            application/json:
+              type: Object
+              example: |
+                [
+                  {
+                    id: 1,
+                    user_id: 1,
+                    user_icon: 'sample.png',
+                    user_name: 'hoge',
+                    media: [],
+                    title: '大阪に行ってきた',
+                    content: '大阪に行ってきた'
+                    created_at: "2018-12-06-xxx-xxx",
+                    updated_at: "2018-12-06-xxx-xxx",
+                  },
+                  {
+                    id: 1,
+                    user_id: 1,
+                    user_icon: 'sample.png',
+                    user_name: 'hoge',
+                    media: [],
+                    title: '大阪に行ってきた',
+                    content: '大阪に行ってきた'
+                    created_at: "2018-12-06-xxx-xxx",
+                    updated_at: "2018-12-06-xxx-xxx",
+                  },
+                ]
+  
+  /items/{name}/{id}:
+    uriParameters:
+      name:
+        type: string
+        description: "ユーザーの名前"
+        required: true
+        example: "hoge"
+      id:
+        type: number
+        description: "記事のID"
+        required: true
+        example: 1
+
+    get:
+      description: "記事の詳細を取得する"          
+      responses:
+        200:
+          body:
+            application/json:
+              type: Object
+              example: |
+                {
+                  id: 1,
+                  user_id: 1,
+                  user_icon: 'icon.png',
+                  user_name: 'hoge',
+                  title: 'hoge',
+                  status: true,
+                  tags: [
+                    { name: 'osaka' },
+                    { name: 'kobe' },
+                    ...
+                  ],
+                  media: [
+                    { url: 'sample.png' },
+                    { url: 'sample2.png' },
+                    ...
+                  ]
+                  content: "hogehoge",
+                  created_at: "2018-12-06-xxx-xxx",
+                  updated_at: "2018-12-06-xxx-xxx"
+                }
+        404:
+          body:
+            application/json:
+              type: Object
+              example: |
+                { error: "記事が見つかりません" }
+
+#------------------------------
+# Comment
+#-------------------------------
+/comments:
+  displayName: Comments
+  description: "Comment Resource Collection"
+  post:
+    description: "コメントの投稿"
+
+    # header
+    headers: 
+      client: 
+        type: string
+        description: "devise_token_authに必要なパラメータ"
+        required: true
+
+      uid:
+        type: string
+        description: "devise_token_authに必要なパラメータ"
+        required: true
+        
+      access-token: 
+        type: string
+        description: "devise_token_authに必要なパラメータ"
+        required: true
+    
+    # request
+    queryParameters:
+      comment:
+        type: string
+        description: "コメントの本文です"
+        example: "とてもよかったです。"
+      user_id:
+      article_id:
+  /{id}:
+    # url parameter
+    uriParameters: 
+      id: 
+        type: number
+        required: true
+        example: 1
+
+    get:
+      description: "{id}のコメントを取得する"
+      # header
+      headers: 
+        client: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+        uid:
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+          
+        access-token: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+      responses:
+        200:
+          body:
+            application/json:
+              type: Object
+              example: | 
+                {
+                  id: 1,
+                  user_id: 1,
+                  user_icon: 'icon.png',
+                  comment: 'とても良かったです",
+                }
+        404:
+          body:
+            application/json:
+              type: Object
+              example: | 
+                { error: "コメントが見つかりませんでした" }
+    put:
+      description: "{id}のコメントを更新する"
+
+      # header
+      headers: 
+        client: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+        uid:
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+          
+        access-token: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+
+      queryParameters: 
+        comment:
+          type: string
+          description: "更新するコメントの内容です"
+          example: "新しいコメントです"
+      responses: 
+        200:
+          body:
+            application/json:
+              type: Object
+              example: |
+                { message: "コメントを更新しました" }
+        401:
+          body:
+            application/json:
+              type: Object
+              example: |
+                { error: "更新する権限がありません" }
+
+    delete:
+      description: "{id}のコメントを削除する"
+
+      # header
+      headers: 
+        client: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+        uid:
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+          
+        access-token: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+
+      responses:
+        200:
+          body:
+            application/json:
+              type: Object
+              example: | 
+                { message: "コメントを削除しました" }
+        401:
+          body:
+            application/json:
+              type: Object
+              example: | 
+                { error: "削除する権限がありません" }
