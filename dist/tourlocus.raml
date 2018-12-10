@@ -122,12 +122,176 @@ version: 1.0
               example: |
                 { error: "記事が見つかりません" }
 
-#------------------------------
-# Comment
-#-------------------------------
+  /items/{id}:
+    uriParameters: 
+      id: 
+        type: number
+        description: "記事のID"
+        required: true
+
+    get:
+      headers: 
+        client: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+        uid:
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+          
+        access-token: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+      description: "IDの記事を取得する"
+      responses: 
+        200:
+          body:
+            application/json:
+              type: Object
+              example: |
+                {
+                  id: 1,
+                  user_id: 1,
+                  user_name: 'hoge',
+                  user_icon: 'sample.png',
+                  media: [],
+                  title: "大坂に行ってきた",
+                  content: "大坂に行ってきた",
+                  created_at: "2018-12-06-xxx-xxx",
+                  updated_at: "2018-12-06-xxx-xxx"
+                }
+        401:
+          body:
+            application/json:
+              type: Object
+              example: |
+                { error: "取得権限がありません" }
+
+        404:
+          body:
+            application/json:
+              type: Object
+              example: | 
+                { error: "記事がありません" }
+  
+    put:
+      headers: 
+        client: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+        uid:
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+          
+        access-token: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+      
+      queryParameters: 
+        title:
+          type: string
+          description: "記事のタイトル"
+          example: "大坂に行ってきた"
+        tags:
+          type: Array
+          description: "タグ"
+          example: |
+            ["大坂", "神戸"]
+        media:
+          type: Array
+          description: "ファイルのアップロード"
+        content:
+          type: string
+          description: "記事の本文"
+          example: "関西旅行に行ってきました。"
+      
+      description: "記事の更新"
+      responses: 
+        200:
+          body:
+            application/json:
+              type: Object
+              example:
+                { message: '記事を更新しました' }
+        401:
+          body:
+            application/json:
+              type: Object
+              example:
+                { error: '更新する権限がありません' }
+  /items/create:
+    post:
+      description: "記事を作成する"
+
+      # header
+      headers: 
+        client: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+        uid:
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+          
+        access-token: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+      
+      queryParameters: 
+        title:
+          type: string
+          description: "記事のタイトル"
+          example: "大坂に行ってきた"
+        tags:
+          type: Array
+          description: "タグ"
+          example: |
+            ["大坂", "神戸"]
+        media:
+          type: Array
+          description: "ファイルのアップロード"
+        content:
+          type: string
+          description: "記事の本文"
+          example: "関西旅行に行ってきました。"
+      
+      responses: 
+        200:
+          body:
+            application/json:
+              type: Object
+              example: |
+                { message: "記事を作成しました" }
+        401:
+          body:
+            application/json:
+              type: Object
+              example: |
+                { error: "作成する権限がありません" }
+
+/users:
+  displayName: Users
+  description: "User Resource Collection"
+
+  /items:
+    get:
+      description: "ユーザーの記事一覧を取得する"
+
 /comments:
   displayName: Comments
-  description: "Comment Resource Collection"
+  description: "Comment Resouce Collection"
+
   post:
     description: "コメントの投稿"
 
@@ -156,6 +320,7 @@ version: 1.0
         example: "とてもよかったです。"
       user_id:
       article_id:
+
   /{id}:
     # url parameter
     uriParameters: 
