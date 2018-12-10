@@ -231,6 +231,39 @@ version: 1.0
               type: Object
               example:
                 { error: '更新する権限がありません' }
+    
+    delete:
+      headers: 
+        client: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+        uid:
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+          
+        access-token: 
+          type: string
+          description: "devise_token_authに必要なパラメータ"
+          required: true
+
+      description: "記事を削除する"
+      responses:
+        200:
+          body:
+            application/json:
+              type: Object
+              example: 
+                { message: '記事を削除しました' }
+        401:
+          body:
+            application/json:
+              type: Object
+              example:
+                { error: '削除する権限がありません' }
+
   /items/create:
     post:
       description: "記事を作成する"
